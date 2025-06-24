@@ -5,11 +5,19 @@ public class Sorting
     public static void Demo()
     {
         Random random = new Random();
-        int[] array = [-11, 12, -42, 0, 1, 90, 68, 6, -9];
+        int[] array = ResetArray();
         SelectionSort(array);
-        Console.WriteLine(string.Join(" :: ", array));
+        Console.WriteLine(string.Join(" | ", array));
+        array = ResetArray();
+
+        InsertionSort(array);
+        Console.WriteLine(string.Join(" | ", array));
+        array = ResetArray();
+
     }
+
     
+    public static int[] ResetArray() => new[] { -11, 12, -42, 0, 1, 90, 68, 6, -9 };
     
     
     public static void SelectionSort(int[] a)
@@ -31,5 +39,9 @@ public class Sorting
         }
     }
 
+    public static void InsertionSort(int[] a)
+    {
+        
+    }
     
 }
