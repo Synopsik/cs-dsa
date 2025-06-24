@@ -16,7 +16,8 @@ public class Sorting
         sw.Restart();
         SelectionSort(array);
         sw.Stop();
-        Console.WriteLine($"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
+        Console.WriteLine($"{string.Join(" | ", array)}\n" +
+                          $"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
         
         array = ResetArray();
 
@@ -24,7 +25,8 @@ public class Sorting
         sw.Restart();
         InsertionSort(array);
         sw.Stop();
-        Console.WriteLine($"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
+        Console.WriteLine($"{string.Join(" | ", array)}\n" +
+                          $"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
         
         array = ResetArray();
         
@@ -32,7 +34,35 @@ public class Sorting
         sw.Restart();
         BubbleSort(array);
         sw.Stop();
-        Console.WriteLine($"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
+        Console.WriteLine($"{string.Join(" | ", array)}\n" +
+                          $"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
+        
+        array = ResetArray();
+        
+        Console.WriteLine("\nMerge Sort");
+        sw.Restart();
+        MergeSort(array);
+        sw.Stop();
+        Console.WriteLine($"{string.Join(" | ", array)}\n" +
+                          $"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
+        
+        array = ResetArray();
+        
+        Console.WriteLine("\nShell Sort");
+        sw.Restart();
+        ShellSort(array);
+        sw.Stop();
+        Console.WriteLine($"{string.Join(" | ", array)}\n" +
+                          $"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
+        
+        array = ResetArray();
+        
+        Console.WriteLine("\nSort Part");
+        sw.Restart();
+        SortPart(array);
+        sw.Stop();
+        Console.WriteLine($"{string.Join(" | ", array)}\n" +
+                          $"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
     }
 
     
@@ -89,5 +119,77 @@ public class Sorting
             if (!isAnyChange){break;}
         }
     }
-    
+
+    public static void MergeSort(int[] a)
+    {
+        if (a.Length <= 1) {return;}
+
+        int m = a.Length / 2;
+        int[] left = GetSubarray(a, 0, m - 1);
+        int[] right = GetSubarray(a, m, a.Length - 1);
+        MergeSort(left);
+        MergeSort(right);
+
+        int i = 0, j = 0, k = 0;
+        while (i < left.Length && j < right.Length)
+        {
+            if (left[i] <= right[j]) { a[k] = left[i++]; }
+            else {a[k] = right[j++];}
+            k++;
+        }
+        while ( i < left.Length) {a[k++] = left[i++];}
+        while (j < right.Length) {a[k++] = right[j++];}
+    }
+
+    public static int[] GetSubarray(int[] sourceArray, int startIndex, int endIndex)
+    {
+        int[] destinationArray = new int[endIndex - startIndex + 1];
+        Array.Copy(sourceArray, startIndex, destinationArray, 0, endIndex - startIndex + 1);
+        return destinationArray;
+    }
+
+
+    public static void ShellSort(int[] a)
+    {
+        for (int h = a.Length / 2; h > 0; h /= 2)
+        {
+            for (int i = h; i < a.Length; i++)
+            {
+                int j = i;
+                int ai = a[i];
+
+                while (j >= h && a[j - h] > ai)
+                {
+                    a[j] = a[j - h];
+                    j -= h;
+                }
+
+                a[j] = ai;
+            }
+        }
+    }
+
+    public static void SortPart(int[] a){PartSort(a, 0, a.Length - 1);}
+
+    public static void PartSort(int[] a, int l, int u)
+    {
+        if (l >= u) {return;}
+
+        int pivot = a[u];
+        int j = l - 1;
+        for (int i = l; i < u; i++)
+        {
+            if (a[i] < pivot)
+            {
+                j++;
+                (a[j], a[i]) = (a[i], a[j]);
+            }
+        }
+
+        int p = j + 1;
+        (a[p], a[u]) = (a[u], a[p]);
+
+        PartSort(a, l, p - 1);
+        PartSort(a, p + 1, u);
+    }
 }
