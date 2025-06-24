@@ -1,75 +1,14 @@
 using System.Diagnostics;
-
 namespace Chapter3;
 
-public class Sorting
+public abstract class AbstractSort
 {
-    public static void Demo()
-    {
-        Console.WriteLine("\n\n");
-        Random random = new Random();
-        int[] array = ResetArray();
-        var sw = Stopwatch.StartNew();
-        sw.Stop();
-        
-        Console.WriteLine("Selection Sort");
-        sw.Restart();
-        SelectionSort(array);
-        sw.Stop();
-        Console.WriteLine($"{string.Join(" | ", array)}\n" +
-                          $"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
-        
-        array = ResetArray();
+    public abstract void Sort(int[] a);
+}
 
-        Console.WriteLine("\nInsertion Sort");
-        sw.Restart();
-        InsertionSort(array);
-        sw.Stop();
-        Console.WriteLine($"{string.Join(" | ", array)}\n" +
-                          $"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
-        
-        array = ResetArray();
-        
-        Console.WriteLine("\nBubble Sort");
-        sw.Restart();
-        BubbleSort(array);
-        sw.Stop();
-        Console.WriteLine($"{string.Join(" | ", array)}\n" +
-                          $"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
-        
-        array = ResetArray();
-        
-        Console.WriteLine("\nMerge Sort");
-        sw.Restart();
-        MergeSort(array);
-        sw.Stop();
-        Console.WriteLine($"{string.Join(" | ", array)}\n" +
-                          $"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
-        
-        array = ResetArray();
-        
-        Console.WriteLine("\nShell Sort");
-        sw.Restart();
-        ShellSort(array);
-        sw.Stop();
-        Console.WriteLine($"{string.Join(" | ", array)}\n" +
-                          $"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
-        
-        array = ResetArray();
-        
-        Console.WriteLine("\nSort Part");
-        sw.Restart();
-        SortPart(array);
-        sw.Stop();
-        Console.WriteLine($"{string.Join(" | ", array)}\n" +
-                          $"Time Elapsed: {sw.Elapsed.TotalMilliseconds} ms");
-    }
-
-    
-    public static int[] ResetArray() => new[] { -11, 12, -42, 0, 1, 90, 68, 6, -9 };
-    
-    
-    public static void SelectionSort(int[] a)
+public class SelectionSort : AbstractSort
+{
+    public override void Sort(int[] a)
     {
         for (int i = 0; i < a.Length - 1; i++)
         {
@@ -88,8 +27,12 @@ public class Sorting
             (a[i], a[minIndex]) = (a[minIndex], a[i]);
         }
     }
+}
 
-    public static void InsertionSort(int[] a)
+
+public class InsertionSort : AbstractSort
+{
+    public override void Sort(int[] a)
     {
         for (int i = 1; i < a.Length; i++)
         {
@@ -102,8 +45,11 @@ public class Sorting
             }
         }
     }
+}
 
-    public static void BubbleSort(int[] a)
+public class BubbleSort : AbstractSort
+{
+    public override void Sort(int[] a)
     {
         for (int i = 0; i < a.Length; i++)
         {
@@ -116,29 +62,54 @@ public class Sorting
                     (a[j], a[j + 1]) = (a[j + 1], a[j]);
                 }
             }
-            if (!isAnyChange){break;}
+
+            if (!isAnyChange)
+            {
+                break;
+            }
         }
     }
+}
 
-    public static void MergeSort(int[] a)
+public class MergeSort : AbstractSort
+{
+    public override void Sort(int[] a)
     {
-        if (a.Length <= 1) {return;}
+        if (a.Length <= 1)
+        {
+            return;
+        }
 
         int m = a.Length / 2;
         int[] left = GetSubarray(a, 0, m - 1);
         int[] right = GetSubarray(a, m, a.Length - 1);
-        MergeSort(left);
-        MergeSort(right);
+        Sort(right);
+        Sort(left);
 
         int i = 0, j = 0, k = 0;
         while (i < left.Length && j < right.Length)
         {
-            if (left[i] <= right[j]) { a[k] = left[i++]; }
-            else {a[k] = right[j++];}
+            if (left[i] <= right[j])
+            {
+                a[k] = left[i++];
+            }
+            else
+            {
+                a[k] = right[j++];
+            }
+
             k++;
         }
-        while ( i < left.Length) {a[k++] = left[i++];}
-        while (j < right.Length) {a[k++] = right[j++];}
+
+        while (i < left.Length)
+        {
+            a[k++] = left[i++];
+        }
+
+        while (j < right.Length)
+        {
+            a[k++] = right[j++];
+        }
     }
 
     public static int[] GetSubarray(int[] sourceArray, int startIndex, int endIndex)
@@ -147,9 +118,11 @@ public class Sorting
         Array.Copy(sourceArray, startIndex, destinationArray, 0, endIndex - startIndex + 1);
         return destinationArray;
     }
+}
 
-
-    public static void ShellSort(int[] a)
+public class ShellSort : AbstractSort
+{
+    public override void Sort(int[] a)
     {
         for (int h = a.Length / 2; h > 0; h /= 2)
         {
@@ -168,28 +141,69 @@ public class Sorting
             }
         }
     }
+}
 
-    public static void SortPart(int[] a){PartSort(a, 0, a.Length - 1);}
-
-    public static void PartSort(int[] a, int l, int u)
+public class SortPart : AbstractSort
+{
+    public override void Sort(int[] a)
     {
-        if (l >= u) {return;}
+        _SortPart(a, 0, a.Length - 1);
+    }
 
-        int pivot = a[u];
-        int j = l - 1;
-        for (int i = l; i < u; i++)
+    public static void _SortPart(int[] array, int lowerIndex, int upperIndex)
+    {
+        if (lowerIndex >= upperIndex)
         {
-            if (a[i] < pivot)
+            return;
+        }
+
+        int pivot = array[upperIndex];
+        int j = lowerIndex - 1;
+        for (int i = lowerIndex; i < upperIndex; i++)
+        {
+            if (array[i] < pivot)
             {
                 j++;
-                (a[j], a[i]) = (a[i], a[j]);
+                (array[j], array[i]) = (array[i], array[j]);
             }
         }
 
-        int p = j + 1;
-        (a[p], a[u]) = (a[u], a[p]);
+        int pivotIndex = j + 1;
+        (array[pivotIndex], array[upperIndex]) = (array[upperIndex], array[pivotIndex]);
 
-        PartSort(a, l, p - 1);
-        PartSort(a, p + 1, u);
+        _SortPart(array, lowerIndex, pivotIndex - 1);
+        _SortPart(array, pivotIndex + 1, upperIndex);
+    }
+}
+
+public class HeapSort : AbstractSort
+{
+    public override void Sort(int[] array)
+    {
+        for (int i = array.Length / 2 - 1; i >= 0; i--)
+        {
+            Heapify(array, array.Length, i);
+        }
+
+        for (int i = array.Length - 1; i > 0; i--)
+        {
+            (array[0], array[i]) = (array[i], array[0]);
+            Heapify(array, i, 0);
+        }
+    }
+
+    public static void Heapify(int[] a, int n, int i)
+    {
+        int max = i;
+        int l = 2 * i + 1;
+        int r = 2 * i + 2;
+
+        max = l < n && a[l] > a[max] ? l : max;
+        max = r < n && a[r] > a[max] ? r : max;
+
+        if (max == i) return;
+
+        (a[i], a[max]) = (a[max], a[i]);
+        Heapify(a, n, max);
     }
 }
