@@ -143,14 +143,14 @@ public class ShellSort : AbstractSort
     }
 }
 
-public class SortPart : AbstractSort
+public class QuickSort : AbstractSort
 {
     public override void Sort(int[] a)
     {
-        _SortPart(a, 0, a.Length - 1);
+        _QuickSort(a, 0, a.Length - 1);
     }
 
-    public static void _SortPart(int[] array, int lowerIndex, int upperIndex)
+    public static void _QuickSort(int[] array, int lowerIndex, int upperIndex)
     {
         if (lowerIndex >= upperIndex)
         {
@@ -171,8 +171,8 @@ public class SortPart : AbstractSort
         int pivotIndex = j + 1;
         (array[pivotIndex], array[upperIndex]) = (array[upperIndex], array[pivotIndex]);
 
-        _SortPart(array, lowerIndex, pivotIndex - 1);
-        _SortPart(array, pivotIndex + 1, upperIndex);
+        _QuickSort(array, lowerIndex, pivotIndex - 1);
+        _QuickSort(array, pivotIndex + 1, upperIndex);
     }
 }
 
