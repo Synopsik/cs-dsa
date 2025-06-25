@@ -28,9 +28,6 @@ public class Visualization
     }
     
     
-    
-    
-    
     private readonly Game _game;
     private readonly int _columnSize;
     private readonly char[,] _board;
@@ -65,8 +62,24 @@ public class Visualization
             }
         }
     }
-    
-    
-    
+
+    private string Center(string text)
+    {
+        var margin = (_columnSize - text.Length) / 2;
+        return text.PadLeft(margin + text.Length).PadRight(_columnSize);
+    }
+
+    private void DrawBoard()
+    {
+        for (var y = 0; y < _board.GetLength(0); y++)
+        {
+            var line = string.Empty;
+            for (var x = 0; x < _board.GetLength(1); x++)
+            {
+                line += _board[y, x];
+            }
+            Console.WriteLine(line);
+        }
+    }
     
 }
