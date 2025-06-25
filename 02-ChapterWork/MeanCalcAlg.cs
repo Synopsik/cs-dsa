@@ -1,4 +1,4 @@
-﻿namespace Chapter2;
+﻿namespace Chapter_02;
 
 public class MeanCalcAlg
 {
