@@ -24,7 +24,6 @@ public record Robot
     public required int Lifespan { get; set; }
 }
 
-
 public class Records
 {
     public static void RecordsDemo()
