@@ -1,5 +1,5 @@
 using System.Collections;
-namespace _04_ChapterWork;
+namespace Chapter4;
 
 public class ArrayLists
 {
