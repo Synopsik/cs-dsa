@@ -12,7 +12,6 @@ public class Arrays
      */
     public static void ArraysDemo()
     {
-        
         float[] temps; // Declare array
 
         var numbers = new int[5];
