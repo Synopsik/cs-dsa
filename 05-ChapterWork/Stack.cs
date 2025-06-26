@@ -5,7 +5,7 @@ public class Stack
 {
     public static void Demo()
     {
-        var text = "MARCIN";
+        var text = "SYNOPSIK";
         
         // Create stack chars
         var chars = new Stack<char>();
