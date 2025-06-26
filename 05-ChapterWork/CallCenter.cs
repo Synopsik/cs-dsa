@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 namespace Chapter5;
 
 public class IncomingCall
@@ -13,8 +14,8 @@ public class IncomingCall
 public class CallCenter
 {
     private int _counter = 0;
-    public Queue<IncomingCall> Calls { get; private set; }
-    public CallCenter() => Calls = new Queue<IncomingCall>();
+    public ConcurrentQueue<IncomingCall> Calls { get; private set; }
+    public CallCenter() => Calls = new ConcurrentQueue<IncomingCall>();
 
     public IncomingCall Call(int clientId)
     {
@@ -30,18 +31,19 @@ public class CallCenter
 
     public IncomingCall? Answer(string consultant)
     {
-        if (!AreWaitingCalls()) {return null;}
+        if (!Calls.IsEmpty && Calls.TryDequeue(out var call))
+        {
+            call.Consultant = consultant;
+            call.AnswerTime = DateTime.Now;
+            return call;
+        }
 
-        IncomingCall call = Calls.Dequeue();
-        call.Consultant = consultant;
-        call.AnswerTime = DateTime.Now;
-        return call;
+        return null;
     }
 
     public void End(IncomingCall call) => call.EndTime = DateTime.Now;
-    public bool AreWaitingCalls() => Calls.Count > 0;
+    public bool AreWaitingCalls() => !Calls.IsEmpty;
 
-    
 }
 
 
