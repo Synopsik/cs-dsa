@@ -1,4 +1,6 @@
 using System.Collections.Concurrent;
+using Priority_Queue;
+
 namespace Chapter5;
 
 public class IncomingCall
@@ -9,41 +11,39 @@ public class IncomingCall
     public DateTime? AnswerTime { get; set; }
     public DateTime? EndTime { get; set; }
     public string? Consultant { get; set; }
+    public bool IsPriority { get; set; }
 }
 
 public class CallCenter
 {
     private int _counter = 0;
-    public ConcurrentQueue<IncomingCall> Calls { get; private set; }
-    public CallCenter() => Calls = new ConcurrentQueue<IncomingCall>();
+    public SimplePriorityQueue<IncomingCall> Calls { get; private set; }
+    public CallCenter() => Calls = new SimplePriorityQueue<IncomingCall>();
 
-    public IncomingCall Call(int clientId)
+    public IncomingCall Call(int clientId, bool isPriority)
     {
         IncomingCall call = new()
         {
             Id = ++_counter,
             ClientID = clientId,
-            CallTime = DateTime.Now
+            CallTime = DateTime.Now,
+            IsPriority = isPriority
         };
-        Calls.Enqueue(call);
+        Calls.Enqueue(call, isPriority ? 0 : 1);
         return call;
     }
 
     public IncomingCall? Answer(string consultant)
     {
-        if (!Calls.IsEmpty && Calls.TryDequeue(out var call))
-        {
-            call.Consultant = consultant;
-            call.AnswerTime = DateTime.Now;
-            return call;
-        }
+        if (!AreWaitingCalls()) { return null; }
 
-        return null;
+        var call = Calls.Dequeue();
+        call.Consultant = consultant;
+        call.AnswerTime = DateTime.Now;
+        return call;
     }
 
     public void End(IncomingCall call) => call.EndTime = DateTime.Now;
-    public bool AreWaitingCalls() => !Calls.IsEmpty;
+    public bool AreWaitingCalls() => Calls.Count > 0;
 
 }
-
-
