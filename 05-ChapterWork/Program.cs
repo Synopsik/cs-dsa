@@ -15,6 +15,6 @@
 */
 // await Queue.Demo();
 
-CircularQueue<int>.CircularDemo();
+// CircularQueue<int>.CircularDemo();
 
-CircularQueue<int>.CircularCoasterDemo();
+await CircularQueue<int>.CircularCoasterDemo();
