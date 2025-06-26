@@ -13,4 +13,8 @@
 /                       Queue Examples                         /
 / ------------------------------------------------------------ /
 */
-await Queue.Demo();
+// await Queue.Demo();
+
+CircularQueue<int>.CircularDemo();
+
+CircularQueue<int>.CircularCoasterDemo();
