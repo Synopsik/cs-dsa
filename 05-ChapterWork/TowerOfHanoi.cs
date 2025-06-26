@@ -1,5 +1,7 @@
 namespace Chapter5;
 
+
+
 public class Game
 {
     public Stack<int> From { get; private set; }
@@ -32,5 +34,13 @@ public class Game
         MoveCompleted?.Invoke(this, EventArgs.Empty);
         await Task.Delay(250);
         await MoveAsync(discs - 1, auxiliary, to, from);
+    }
+
+    public static async Task Demo()
+    {
+        Game game = new(5);
+        Visualization vis = new(game);
+        game.MoveCompleted += (s, e) => vis.Show((Game)s!);
+        await game.MoveAsync(game.DiscsCount, game.From, game.To, game.Auxiliary);
     }
 }
