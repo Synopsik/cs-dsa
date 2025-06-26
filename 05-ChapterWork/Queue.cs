@@ -159,17 +159,15 @@ public class Queue
             Log($"Call #{call.Id} from client #{call.ClientID} " +
                 $"is ended by {call.Consultant}", call.IsPriority);
         }
-
-        void Log(string text, bool isPriority)
-        {
-            Console.ForegroundColor = isPriority ? 
-                ConsoleColor.Red : ConsoleColor.Gray;
-            
-            Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] {text}");
-            Console.ResetColor();
-        }
-
+    }
+    
+    static void Log(string text, bool isPriority)
+    {
+        Console.ForegroundColor = isPriority ? 
+            ConsoleColor.Red : ConsoleColor.Gray;
         
+        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] {text}");
+        Console.ResetColor();
     }
     static void Header(string title)
     {
