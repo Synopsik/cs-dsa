@@ -1,3 +1,10 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using Chapter7;
 
-Console.WriteLine("Hello, World!");
+
+
+// -------------------------------------------------------------------- //
+//                           Trie Example                               //
+// -------------------------------------------------------------------- //
+
+// TrieDemo.Demo1();
+await TrieDemo.Demo2();
