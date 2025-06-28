@@ -1,4 +1,5 @@
 namespace Chapter7;
+public enum TraversalEnum {PreOrder, InOrder, PostOrder}
 
 public class BinaryTreeNode<T> : TreeNode<T>
 {
@@ -69,7 +70,6 @@ public class BinaryTree<T>
         return nodes;
     }
     
-    public enum TraversalEnum {PreOrder, InOrder, PostOrder}
     
     public int GetHeight() => Root != null 
         ? Traverse(TraversalEnum.PreOrder).Max(n => n.GetHeight()) 
