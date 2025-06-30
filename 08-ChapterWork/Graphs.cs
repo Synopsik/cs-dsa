@@ -103,6 +103,7 @@ public class Graph<T>
                 edges.Add(edge);
             }
         }
+
         return edges;
     }
 
