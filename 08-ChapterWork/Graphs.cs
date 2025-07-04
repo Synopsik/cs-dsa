@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Priority_Queue;
 namespace Chapter8;
 
 public class Node<T>
@@ -266,5 +268,88 @@ public class Graph<T>
 
         return minIndex;
     }
+
+    public int[] Color()
+    {
+        var colors = new int[Nodes.Count];
+        Array.Fill(colors, -1);
+        colors[0] = 0;
+
+        var available = new bool[Nodes.Count];
+        for (var i = 1; i < Nodes.Count; i++)
+        {
+            Array.Fill(available, true);
+
+            foreach (var neighbor in Nodes[i].Neighbors)
+            {
+                var colorIndex = colors[neighbor.Index];
+                if(colorIndex >= 0) {available[colorIndex]=false;}
+            }
+
+            colors[i] = Array.IndexOf(available, true);
+        }
+
+        return colors;
+    }
+
+    public List<Edge<T>> GetShortestPath(Node<T> source, Node<T> target)
+    {
+        // Create an empty array for the Nodes previously walked (size equal to the size of Nodes)
+        // At the end we walk this array backwards to find the optimal path 
+        int[] previous = new int[Nodes.Count]; 
+        Array.Fill(previous, -1); // Fill all indexes with -1
+        
+        // Create an empty array for current minimum distances
+        int[] distances = new int[Nodes.Count];
+        Array.Fill(distances, int.MaxValue); // Fill all indexes with infinity (technically max int value)
+        distances[source.Index] = 0; // Set the starting (root) node to 0
+
+        // Construct nodes Priority Queue, we begin searching all paths
+        // while prioritizing distances with lower values
+        SimplePriorityQueue<Node<T>> nodes = new(); 
+        for (var i = 0; i < Nodes.Count; i++)
+        {
+            nodes.Enqueue(Nodes[i], distances[i]);
+        }
+
+        while (nodes.Count != 0)
+        {
+            var node = nodes.Dequeue();
+            for (var i = 0; i < node.Neighbors.Count; i++)
+            {
+                var neighbor = node.Neighbors[i];
+                var weight = i < node.Weights.Count ? node.Weights[i] : 0;
+                var wTotal = distances[node.Index] + weight;
+
+                if (distances[neighbor.Index] > wTotal)
+                {
+                    distances[neighbor.Index] = wTotal;
+                    previous[neighbor.Index] = node.Index;
+                    nodes.UpdatePriority(neighbor, distances[neighbor.Index]);
+                }
+            }
+        }
+
+        List<int> indices = [];
+        var index = target.Index;
+        while (index >= 0)
+        {
+            indices.Add(index);
+            index = previous[index];
+        }
+
+        indices.Reverse();
+        List<Edge<T>> result = [];
+        for (var i = 0; i < indices.Count - 1; i++)
+        {
+            var edge = this[indices[i], indices[i + 1]]!;
+            result.Add(edge);
+        }
+
+        return result;
+    }
+    
+    
+    
 }
 
