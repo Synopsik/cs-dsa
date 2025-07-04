@@ -54,3 +54,21 @@ List<int> GetCoins(int amount)
     }
     return selectedCoins; // Return the created from used coins
 }
+Console.WriteLine();
+
+
+
+
+
+// --------------------------------------------------------------- //
+//                           Title Guess                           //
+// --------------------------------------------------------------- //
+var titleGuess = new TitleGuess();
+titleGuess.Demo();
+
+
+// --------------------------------------------------------------- //
+//                         Password Guess                          //
+// --------------------------------------------------------------- //
+var passwordGuess = new PasswordGuess();
+passwordGuess.Demo();
